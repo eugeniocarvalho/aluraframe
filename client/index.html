@@ -13,7 +13,7 @@
 
 	<h1 class="text-center">Negociações</h1>
 
-	<form class="form text-white">
+	<form class="form text-white" onsubmit="negociacaoController.adiciona(event)">
 
 		<div class="form-group">
 			<label class="form-label" for="data">Data</label>
@@ -62,16 +62,9 @@
 	</table>
 
 	<script src="js/app/models/Negociacao.js"></script>
+	<script src="js/app/controllers/NegociacaoController.js"></script>
 	<script>
-		let hoje = new Date();
-
-		const negociacao1 = new Negociacao(hoje, 5, 200);
-
-		console.log(negociacao1.data);
-
-		hoje.setDate(11);
-		
-		console.log(negociacao1.data);
+		let negociacaoController = new NegociacaoController();
 	</script>
 
 	<!-- JavaScript Bundle with Popper -->
