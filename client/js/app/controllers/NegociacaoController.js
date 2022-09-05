@@ -10,20 +10,18 @@ class NegociacaoController {
   adiciona(event) {
     event.preventDefault();
 
-    //YYYY-MM-DD
-    let data = this._inputData.value.split('-');
-
-    data = data.map((number, index) => number - index % 2);
+    const helper = new DateHelper();
 
     const negociacao = new Negociacao(
-      new Date(...data),
+      helper.textoParaData(this._inputData.value),
       this._inputQuantidade.value,
       this._inputValor.value
     );
 
-    console.log(negociacao);
+    const diaMesAno = helper.dataParaTexto(negociacao.data);
 
-    
-    //TODO: adicionar negociação em uma lista
+    console.log(negociacao)
+
+    console.log(diaMesAno);
   }
 } 
