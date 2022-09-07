@@ -23,6 +23,8 @@ class NegociacaoController {
     this._mensagemView.update(this._mensagem);
 
     this._limpaFormulario();
+    this._limpaMensagem();
+
   }
 
   apaga() {
@@ -30,6 +32,7 @@ class NegociacaoController {
 
     this._mensagem.texto = "Lista apagada com sucesso!";
     this._mensagemView.update(this._mensagem);
+    this._limpaMensagem();
   }
 
   _criaNegociacao() {
@@ -47,4 +50,12 @@ class NegociacaoController {
 
     this._inputData.focus();
   }
-} 
+
+  _limpaMensagem() {
+    setTimeout(() => {
+      this._mensagem.texto = "";
+      this._mensagemView.update(this._mensagem);
+        
+      }, 3000);
+  }
+}
