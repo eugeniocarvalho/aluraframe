@@ -5,7 +5,30 @@ class NegociacaoController {
     this._inputData = $('#data');
     this._inputQuantidade = $('#quantidade');
     this._inputValor = $('#valor');
-    this._listaNegociacoes = new ListaNegociacoes(model => this._negociacoesView.update(model));
+    let self = this;
+
+    this._listaNegociacoes = new Proxy(new ListaNegociacoes(), {
+
+      get(target, prop, receiver) {
+
+        if (['adiciona', 'esvazia'].includes(prop) && typeof (target[prop]) == typeof (Function)) {
+          // essa função retornada irá substituir o método no proxy. Ou seja, usando o handler do proxy para modificar o próprio proxy, que loucura!
+          return function () {
+
+            console.log(`método '${prop}' interceptado`);
+            // Quando usarmos Reflect.apply, Reflect.get e Reflect.set precisamos retornar o resultado da operação com return
+            // arguments é uma variável implícita que dá acesso à todos os parâmetros recebidos pelo método/função
+            Reflect.apply(target[prop], target, arguments);
+            
+            self._negociacoesView.update(target);
+
+          }
+        }
+        // só executa se não for função
+        return Reflect.get(target, prop, receiver);
+      }
+    });
+
     this._mensagem = new Mensagem();
     this._mensagemView = new MensagemView($('#mensagemView'));
     this._negociacoesView = new NegociacoesView($('#negociacoesView'));
@@ -17,7 +40,7 @@ class NegociacaoController {
   adiciona(event) {
     event.preventDefault();
 
-    this._listaNegociacoes.adciciona(this._criaNegociacao());
+    this._listaNegociacoes.adiciona(this._criaNegociacao());
     this._mensagem.texto = "Negociação adicionada com sucesso!";
 
     this._mensagemView.update(this._mensagem);
@@ -55,7 +78,7 @@ class NegociacaoController {
     setTimeout(() => {
       this._mensagem.texto = "";
       this._mensagemView.update(this._mensagem);
-        
-      }, 3000);
+
+    }, 3000);
   }
 }
